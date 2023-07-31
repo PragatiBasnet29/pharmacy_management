@@ -11,7 +11,7 @@
     <nav
     class="bg-white border-gray-200 px-4 lg:px-6 py-2.5 dark:bg-gray-800"
   >
-    <div class="flex flex-wrap justify-between items-center mx-auto">
+    <div class="flex flex-wrap justify-between items-center mx-auto ">
       <a href="https://flowbite.com" class="flex items-center">
         <img
           src="https://flowbite.com/docs/images/logo.svg"
@@ -123,7 +123,7 @@
     </div>
   </nav>
 
-<div class="bg-black">
+<div class="bg-black dark:bg-gray-900" >
 <form>
 <div class="mb-6">
     <label for="patients-SSN" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Patients SSN</label>
@@ -197,6 +197,30 @@
                 <td class="px-6 py-4">
                     {Patient's Speciality}
                 </td>
+
+                <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                    <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                        {Patients SSN}
+                    </th>
+                    <td class="px-6 py-4">
+                        {Patient's Name}
+                    </td>
+                    <td class="px-6 py-4">
+                        {Patient's Age}
+                    </td>
+                    <td class="px-6 py-4">
+                        {Patient's Address}
+                    </td>
+            
+                    <td class="px-6 py-4">
+                        {Doctors's SSN}
+                    </td>
+                    <td class="px-6 py-4">
+                        {Doctor's Name}
+                    </td>
+                    <td class="px-6 py-4">
+                        {Patient's Speciality}
+                    </td>
     
         </tbody>
     </table>
