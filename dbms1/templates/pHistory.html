@@ -219,11 +219,34 @@
                         {Doctor's Name}
                     </td>
                     <td class="px-6 py-4">
-                        {Patient's Speciality}
+                      {{hello}}
                     </td>
     
         </tbody>
-    </table>
+        <table>
+          <tr>
+              <th>PATIENT'S SSN</th>
+              <th>PATIENT'S NAME</th>
+              <th>PATIENT'S AGE</th>
+              <th>ADDRESS</th>
+              <th>DOCTOR'S SSN</th>
+              <th>DOCTOR'S NAME</th>
+              <th>SPECIALITY</th>
+              <th>DATE</th>
+          </tr>
+          {% for prescription in pre %}
+          <tr>
+              <td>{{ prescription.PATIENTSSN}}</td>
+              <td>{{ prescription.PATIENTNAME }}</td>
+              <td>{{ prescription.PATIENTAGE}}</td>
+              <td>{{ prescription.ADDRESS }}</td>
+              <td>{{ prescription.DOCTORSSN }}</td>
+              <td>{{ prescription.DOCTORNAME }}</td>
+              <td>{{ prescription.SPECIALITY }}</td>
+              <td>{{ prescription.DATE }}</td>
+          </tr>
+          {% endfor %}
+      </table>
 </div>
 
 
