@@ -7,3 +7,7 @@ def hello_view(request):
 
 def index(request):
     return render(request,'index.html')
+
+
+def p_history(request):
+    return render(request,'pHistory.html')
