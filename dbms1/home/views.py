@@ -7,6 +7,7 @@ def hello_view(request):
 
 
 def index(request):
+
     return render(request,'index.html')
 
 
@@ -24,3 +25,8 @@ def p_history(request):
     for row in rows:
         print(', '.join(str(value) for value in row))
     return render(request,'pHistory.html')
+
+
+def appointment(request):
+
+    return render(request,'appointment.html')
