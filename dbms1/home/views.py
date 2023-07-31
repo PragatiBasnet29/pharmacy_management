@@ -6,4 +6,4 @@ def hello_view(request):
 
 
 def index(request):
-    return render(request,'appointment.html')
+    return render(request,'Pharmacy.html')
