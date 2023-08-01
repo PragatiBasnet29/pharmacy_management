@@ -4,6 +4,7 @@ from django.db import connection
 import datetime
 import json
 
+
 def hello_view(request):
     return HttpResponse("hello")
 
@@ -55,7 +56,22 @@ def p_history(request):
 
 
 def appointment(request):
+    if request.method=="GET":
+        # values=request.GET.get()
+        # print(values)
+        print(request.GET.get('Date'))
+        doctorssn = request.GET.get('DoctorSSN')
+        patientssn = request.GET.get('PatientSSN')
+        drugtardename = request.GET.get('DrugTradename')
+        date = request.GET.get('Date')
+        #date='2023-08-01'
+        quantity = request.GET.get('Quantity')
 
+        raw_query = f"INSERT INTO prescriptions ( Doctor_SSN, Patient_SSN, Drug_TradeName, Date, Quantity) VALUES ( '{doctorssn}', '{patientssn}', '{drugtardename}', '{date}', {quantity})"
+        print(raw_query)
+        with connection.cursor() as cursor:
+            cursor.execute(raw_query)
+        
     return render(request,'appointment.html')
 
 def results(request):
