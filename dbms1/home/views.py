@@ -12,6 +12,7 @@ def hello_view(request):
 
 def index(request):
 
+
     return render(request,'index.html')
 
 
@@ -82,6 +83,80 @@ def appointment(request):
                 return render(request,'appointment.html')
 
     return render(request,'appointment.html')
+
+def contract(request):
+        
+    if request.method=="GET":
+        name = request.GET.get('name')
+        pharmacy_id = request.GET.get('pharmacy_id')
+        start_date = request.GET.get('start_date')
+        end_date = request.GET.get('end_date')
+        contract_text = request.GET.get('contract_text')
+        raw_query = f"INSERT INTO contract (PharmaceuticalCo,Pharmacy_ID,Start_Date,End_Date ,Contract_Text  )  VALUES (  '{name}', '{pharmacy_id}','{start_date}', '{end_date}', {contract_text})"
+        print(raw_query)
+        with connection.cursor() as cursor:
+          cursor.execute(raw_query)
+
+    return render(request,'contract.html')
+
+
+def doctors(request):
+    if request.method=="GET":
+        name = request.GET.get('name')
+        speciality = request.GET.get('speciality')
+        years_of_experience = request.GET.get('start_date')
+ 
+        raw_query = f"INSERT INTO doctors ( Name, Specialty, YearsOfExp)  VALUES (  '{name}', '{speciality}','{years_of_experience}')"
+        print(raw_query)
+        with connection.cursor() as cursor:
+          cursor.execute(raw_query)
+
+    return render(request,'Doctors.html')
+
+def patients(request):
+    if request.method=="GET":
+        name = request.GET.get('name')
+        address = request.GET.get('address')
+        age = request.GET.get('age')
+ 
+        raw_query = f"INSERT INTO patients ( Name, Address, Age)  VALUES (  '{name}', '{address}','{age}')"
+        print(raw_query)
+        with connection.cursor() as cursor:
+          cursor.execute(raw_query)
+
+    
+
+    return render(request,'patients.html')
+
+def phco(request):
+     if request.method=="GET":
+        company = request.GET.get('company')
+        phone = request.GET.get('phone')
+        
+ 
+        raw_query = f"INSERT INTO PharmaceuticalCo ( CompanyName, Phone_Number)  VALUES (  '{company}', '{phone}')"
+        print(raw_query)
+        with connection.cursor() as cursor:
+          cursor.execute(raw_query)
+
+
+     return render(request,'PharmaceuticalCo.html')
+
+def pharmacy(request):
+     if request.method=="GET":
+        name = request.GET.get('name')
+        address = request.GET.get('address')
+        phone= request.GET.get('phone')
+ 
+
+        
+ 
+        raw_query = f"INSERT INTO pharmacy (Name, Address,Phone_Number)  VALUES (  '{name}', '{address}','{phone}')"
+        print(raw_query)
+        with connection.cursor() as cursor:
+          cursor.execute(raw_query)
+
+     return render(request,'pharmacy.html')
 
 def results(request):
 
