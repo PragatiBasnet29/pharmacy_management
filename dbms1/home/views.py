@@ -87,29 +87,33 @@ def appointment(request):
 def contract(request):
         
     if request.method=="GET":
-        name = request.GET.get('name')
-        pharmacy_id = request.GET.get('pharmacy_id')
-        start_date = request.GET.get('start_date')
-        end_date = request.GET.get('end_date')
-        contract_text = request.GET.get('contract_text')
-        raw_query = f"INSERT INTO contract (PharmaceuticalCo,Pharmacy_ID,Start_Date,End_Date ,Contract_Text  )  VALUES (  '{name}', '{pharmacy_id}','{start_date}', '{end_date}', {contract_text})"
-        print(raw_query)
-        with connection.cursor() as cursor:
-          cursor.execute(raw_query)
+        
+            name = request.GET.get('name')
+            pharmacy_id = request.GET.get('pharmacy_id')
+            start_date = request.GET.get('start_date')
+            end_date = request.GET.get('end_date')
+            contract_text = request.GET.get('contract_text')
+            raw_query = f"INSERT INTO contract (PharmaceuticalCo,Pharmacy_ID,Start_Date,End_Date ,Contract_Text  )  VALUES (  '{name}', '{pharmacy_id}','{start_date}', '{end_date}', {contract_text})"
+            print(raw_query)
+            if name is not None:
+                with connection.cursor() as cursor:
+                    cursor.execute(raw_query)
 
     return render(request,'contract.html')
 
 
 def doctors(request):
     if request.method=="GET":
+        
         name = request.GET.get('name')
         speciality = request.GET.get('speciality')
         years_of_experience = request.GET.get('start_date')
  
         raw_query = f"INSERT INTO doctors ( Name, Specialty, YearsOfExp)  VALUES (  '{name}', '{speciality}','{years_of_experience}')"
         print(raw_query)
-        with connection.cursor() as cursor:
-          cursor.execute(raw_query)
+        if name is not None:
+            with connection.cursor() as cursor:
+             cursor.execute(raw_query)
 
     return render(request,'Doctors.html')
 
@@ -121,8 +125,9 @@ def patients(request):
  
         raw_query = f"INSERT INTO patients ( Name, Address, Age)  VALUES (  '{name}', '{address}','{age}')"
         print(raw_query)
-        with connection.cursor() as cursor:
-          cursor.execute(raw_query)
+        if name is not None:
+            with connection.cursor() as cursor:
+                cursor.execute(raw_query)
 
     
 
@@ -136,8 +141,9 @@ def phco(request):
  
         raw_query = f"INSERT INTO PharmaceuticalCo ( CompanyName, Phone_Number)  VALUES (  '{company}', '{phone}')"
         print(raw_query)
-        with connection.cursor() as cursor:
-          cursor.execute(raw_query)
+        if company is not None:
+            with connection.cursor() as cursor:
+             cursor.execute(raw_query)
 
 
      return render(request,'PharmaceuticalCo.html')
@@ -149,12 +155,12 @@ def pharmacy(request):
         phone= request.GET.get('phone')
  
 
-        
+        if name is not None:
  
-        raw_query = f"INSERT INTO pharmacy (Name, Address,Phone_Number)  VALUES (  '{name}', '{address}','{phone}')"
-        print(raw_query)
-        with connection.cursor() as cursor:
-          cursor.execute(raw_query)
+            raw_query = f"INSERT INTO pharmacy (Name, Address,Phone_Number)  VALUES (  '{name}', '{address}','{phone}')"
+            print(raw_query)
+            with connection.cursor() as cursor:
+                cursor.execute(raw_query)
 
      return render(request,'pharmacy.html')
 
