@@ -1,8 +1,9 @@
 from django.http import HttpResponse
-from django.shortcuts import render
+from django.shortcuts import render,redirect
 from django.db import connection
 import datetime
 import json
+from django.contrib import messages
 
 
 def hello_view(request):
@@ -59,6 +60,7 @@ def appointment(request):
     if request.method=="GET":
         # values=request.GET.get()
         # print(values)
+
         print(request.GET.get('Date'))
         doctorssn = request.GET.get('DoctorSSN')
         patientssn = request.GET.get('PatientSSN')
@@ -66,12 +68,19 @@ def appointment(request):
         date = request.GET.get('Date')
         #date='2023-08-01'
         quantity = request.GET.get('Quantity')
+        if doctorssn is None:
+            return render(request,'appointment.html')
 
         raw_query = f"INSERT INTO prescriptions ( Doctor_SSN, Patient_SSN, Drug_TradeName, Date, Quantity) VALUES ( '{doctorssn}', '{patientssn}', '{drugtardename}', '{date}', {quantity})"
         print(raw_query)
         with connection.cursor() as cursor:
-            cursor.execute(raw_query)
-        
+            try:
+                cursor.execute(raw_query)
+            except:
+                messages.info(request, 'The doctor or patient has not been added please add them First!!')
+                print("wronginfo")
+                return render(request,'appointment.html')
+
     return render(request,'appointment.html')
 
 def results(request):
