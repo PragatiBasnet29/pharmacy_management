@@ -165,5 +165,33 @@ def pharmacy(request):
      return render(request,'pharmacy.html')
 
 def results(request):
+    if request.method == 'GET':
+        sql = request.GET.get('search')  
+        print(sql)
+        if sql is not None:
+        #raw_query = "SELECT * FROM prescription_history"
+            with connection.cursor() as cursor:
+                cursor.execute(sql)
+                columns = [col[0] for col in cursor.description]
+                print(columns)
+                rows = cursor.fetchall()
+            # for row in rows:
+                prescription_history_list = []
+                for row in rows:
+                        prescription_data = {
+                            columns[i]:row[i] for i in range(len(columns))
+                            
+                        }
 
-    return render(request,'result.html')
+                        # Append the current prescription_data dictionary to the list
+                        prescription_history_list.append(prescription_data)
+                col_dict={
+                    "col":columns
+                    }
+                
+
+                print(str(prescription_history_list))
+                print(str(col_dict))
+            return render(request,'result.html',{'pre':prescription_history_list,"cols":'1'})
+
+        return render(request,'result.html')
