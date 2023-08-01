@@ -12,6 +12,7 @@ def hello_view(request):
 
 def index(request):
 
+
     return render(request,'index.html')
 
 
@@ -83,6 +84,114 @@ def appointment(request):
 
     return render(request,'appointment.html')
 
-def results(request):
+def contract(request):
+        
+    if request.method=="GET":
+        
+            name = request.GET.get('name')
+            pharmacy_id = request.GET.get('pharmacy_id')
+            start_date = request.GET.get('start_date')
+            end_date = request.GET.get('end_date')
+            contract_text = request.GET.get('contract_text')
+            raw_query = f"INSERT INTO contract (PharmaceuticalCo,Pharmacy_ID,Start_Date,End_Date ,Contract_Text  )  VALUES (  '{name}', '{pharmacy_id}','{start_date}', '{end_date}', {contract_text})"
+            print(raw_query)
+            if name is not None:
+                with connection.cursor() as cursor:
+                    cursor.execute(raw_query)
 
-    return render(request,'result.html')
+    return render(request,'contract.html')
+
+
+def doctors(request):
+    if request.method=="GET":
+        
+        name = request.GET.get('name')
+        speciality = request.GET.get('speciality')
+        years_of_experience = request.GET.get('start_date')
+ 
+        raw_query = f"INSERT INTO doctors ( Name, Specialty, YearsOfExp)  VALUES (  '{name}', '{speciality}','{years_of_experience}')"
+        print(raw_query)
+        if name is not None:
+            with connection.cursor() as cursor:
+             cursor.execute(raw_query)
+
+    return render(request,'Doctors.html')
+
+def patients(request):
+    if request.method=="GET":
+        name = request.GET.get('name')
+        address = request.GET.get('address')
+        age = request.GET.get('age')
+ 
+        raw_query = f"INSERT INTO patients ( Name, Address, Age)  VALUES (  '{name}', '{address}','{age}')"
+        print(raw_query)
+        if name is not None:
+            with connection.cursor() as cursor:
+                cursor.execute(raw_query)
+
+    
+
+    return render(request,'patients.html')
+
+def phco(request):
+     if request.method=="GET":
+        company = request.GET.get('company')
+        phone = request.GET.get('phone')
+        
+ 
+        raw_query = f"INSERT INTO PharmaceuticalCo ( CompanyName, Phone_Number)  VALUES (  '{company}', '{phone}')"
+        print(raw_query)
+        if company is not None:
+            with connection.cursor() as cursor:
+             cursor.execute(raw_query)
+
+
+     return render(request,'PharmaceuticalCo.html')
+
+def pharmacy(request):
+     if request.method=="GET":
+        name = request.GET.get('name')
+        address = request.GET.get('address')
+        phone= request.GET.get('phone')
+ 
+
+        if name is not None:
+ 
+            raw_query = f"INSERT INTO pharmacy (Name, Address,Phone_Number)  VALUES (  '{name}', '{address}','{phone}')"
+            print(raw_query)
+            with connection.cursor() as cursor:
+                cursor.execute(raw_query)
+
+     return render(request,'pharmacy.html')
+
+def results(request):
+    if request.method == 'GET':
+        sql = request.GET.get('search')  
+        print(sql)
+        if sql is not None:
+        #raw_query = "SELECT * FROM prescription_history"
+            with connection.cursor() as cursor:
+                cursor.execute(sql)
+                columns = [col[0] for col in cursor.description]
+                print(columns)
+                rows = cursor.fetchall()
+            # for row in rows:
+                prescription_history_list = []
+                for row in rows:
+                        prescription_data = {
+                            columns[i]:row[i] for i in range(len(columns))
+                            
+                        }
+
+                        # Append the current prescription_data dictionary to the list
+                        prescription_history_list.append(prescription_data)
+                col_dict={
+                    "col":columns
+                    }
+                
+
+                print(str(prescription_history_list))
+                print(str(col_dict))
+            return render(request,'result.html',{'pre':prescription_history_list,"cols":'1'})
+
+        return render(request,'result.html')
