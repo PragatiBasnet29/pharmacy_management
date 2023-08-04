@@ -17,44 +17,42 @@ def index(request):
 
 
 def p_history(request):
-    raw_query = "SELECT * FROM prescription_history"
-    with connection.cursor() as cursor:
-        cursor.execute(raw_query)
-        columns = [col[0] for col in cursor.description]
-        rows = cursor.fetchall()
 
-    # Print the column names
-    
+    if request.method == 'GET':
+        patientssn = request.GET.get('patients-SSN') 
+        patientname=request.GET.get('patientname')    
+        raw_query ='''
+                        SELECT h.doctor_ssn,d.name, h.drug_tradename,h.Date,h.quantity 
+                        FROM prescriptions as h,patients as p,doctors as d 
+                        where
+                        p.SSN=h.patient_ssn and p.ssn=1 and d.SSN=h.Doctor_SSN and p.name like 'John Doe';
 
-    # Print the data
-    for row in rows:
-        
-        
-
-        
-
-# Create an empty list to store prescription data for each row
-        prescription_history_list = []
+                    ''' 
+        with connection.cursor() as cursor:
+            cursor.execute(raw_query)
+            columns = [col[0] for col in cursor.description]
+            rows = cursor.fetchall()
 
         for row in rows:
-            # Sample data for the prescription history
-                prescription_data = {
-                    "PATIENTSSN": row[0],
-                    "PATIENTNAME": row[1],
-                    "PATIENTAGE": row[2],
-                    "ADDRESS": row[3],
-                    "DOCTORSSN": "1223",
-                    "DOCTORNAME": 'DoctorName',
-                    "SPECIALITY": 'General Physician',
-                    "DATE": str(datetime.date(2023, 7, 1))
-                }
 
-                # Append the current prescription_data dictionary to the list
-                prescription_history_list.append(prescription_data)
-        
+            prescription_history_list = []
 
-        print(str(prescription_history_list))
-    return render(request,'pHistory.html',{'pre':prescription_history_list})
+            for row in rows:
+                # Sample data for the prescription history
+                    prescription_data = {
+                        "DOCTORSSN": row[0],
+                        "DOCTORNAME": row[1],
+                        # "DATE": str(datetime.date(2023, 7, 1))
+                        "DATE": row[3],
+                        "quantity": row[4],
+                          }
+
+                    # Append the current prescription_data dictionary to the list
+                    prescription_history_list.append(prescription_data)
+            
+
+            print(str(prescription_history_list))
+        return render(request,'pHistory.html',{'pre':prescription_history_list})
 
 
 def appointment(request):
