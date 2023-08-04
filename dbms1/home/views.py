@@ -43,7 +43,7 @@ def p_history(request):
             try:
                 cursor.execute(raw_query2)
             except:
-                 messages.info(request, 'The doctor or patient has not been added please add them First!!')
+                 messages.info(request, 'Give proper SSN and PatientName!!')
                  return render(request,'pHistory.html')
                   
             pat_detail = cursor.fetchone()
@@ -123,7 +123,7 @@ def contract(request):
                     try:
                         cursor.execute(raw_query)
                     except:
-                        messages.info(request, 'The doctor or patient has not been added please add them First!!')
+                        messages.info(request, 'Write Data in Correct form!!')
                         return render(request,'contract.html')
                         
 
@@ -144,7 +144,7 @@ def doctors(request):
                 try:
                     cursor.execute(raw_query)
                 except:
-                    messages.info(request, 'The doctor or patient has not been added please add them First!!')
+                    messages.info(request, 'Write Data in Correct form!!!!')
                     render(request,'contract.html')
 
     return render(request,'Doctors.html')
@@ -162,7 +162,7 @@ def patients(request):
                 try:
                     cursor.execute(raw_query)
                 except:
-                    messages.info(request, 'The doctor or patient has not been added please add them First!!')
+                    messages.info(request, 'Write Data in Correct form!!!')
                     return render(request,'patients.html')
 
 
@@ -183,7 +183,7 @@ def phco(request):
              try:
                 cursor.execute(raw_query)
              except:
-                 messages.info(request, 'The doctor or patient has not been added please add them First!!')
+                 messages.info(request, 'Write Data in Correct form!!!!')
                  return render(request,'PharmaceuticalCo.html')
 
      
@@ -206,7 +206,7 @@ def pharmacy(request):
                 try:
                     cursor.execute(raw_query)
                 except:
-                    messages.info(request, 'The doctor or patient has not been added please add them First!!')
+                    messages.info(request, 'Write Data in Correct form!!!!')
                     return render(request,'pharmacy.html')
 
 
