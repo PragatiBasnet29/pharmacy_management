@@ -14,6 +14,7 @@ urlpatterns = [
     path('Phco/',views.phco,name="phco"),
     path('pharmacy/',views.pharmacy,name="pharmacy"),
     path('results/',views.results,name="results"),
+    path('adminpage/',views.admin_view,name="adminpage"),
 
     
 

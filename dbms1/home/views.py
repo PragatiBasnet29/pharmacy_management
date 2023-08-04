@@ -237,13 +237,14 @@ def results(request):
 
                         # Append the current prescription_data dictionary to the list
                         prescription_history_list.append(prescription_data)
-                col_dict={
-                    "col":columns
-                    }
-                
+               
 
                 print(str(prescription_history_list))
                 print(columns)
             return render(request,'result.html',{'pre':prescription_history_list,"cols":columns,"sql":sql})
 
         return render(request,'result.html')
+    
+
+def admin_view(request):
+    return render(request,"adminpage.html")
