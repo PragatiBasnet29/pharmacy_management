@@ -107,7 +107,7 @@ def doctors(request):
         
         name = request.GET.get('name')
         speciality = request.GET.get('speciality')
-        years_of_experience = request.GET.get('start_date')
+        years_of_experience = request.GET.get('years_of_experience')
  
         raw_query = f"INSERT INTO doctors ( Name, Specialty, YearsOfExp)  VALUES (  '{name}', '{speciality}','{years_of_experience}')"
         print(raw_query)
