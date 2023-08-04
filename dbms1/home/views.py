@@ -40,7 +40,12 @@ def p_history(request):
                     '''
         
         with connection.cursor() as cursor:
-            cursor.execute(raw_query2)
+            try:
+                cursor.execute(raw_query2)
+            except:
+                 messages.info(request, 'The doctor or patient has not been added please add them First!!')
+                 return render(request,'pHistory.html')
+                  
             pat_detail = cursor.fetchone()
             patientdetails={"ssn":pat_detail[0],
                             "name":pat_detail[1],
@@ -115,7 +120,12 @@ def contract(request):
             print(raw_query)
             if name is not None:
                 with connection.cursor() as cursor:
-                    cursor.execute(raw_query)
+                    try:
+                        cursor.execute(raw_query)
+                    except:
+                        messages.info(request, 'The doctor or patient has not been added please add them First!!')
+                        return render(request,'contract.html')
+                        
 
     return render(request,'contract.html')
 
@@ -131,7 +141,11 @@ def doctors(request):
         print(raw_query)
         if name is not None:
             with connection.cursor() as cursor:
-             cursor.execute(raw_query)
+                try:
+                    cursor.execute(raw_query)
+                except:
+                    messages.info(request, 'The doctor or patient has not been added please add them First!!')
+                    render(request,'contract.html')
 
     return render(request,'Doctors.html')
 
@@ -145,7 +159,12 @@ def patients(request):
         print(raw_query)
         if name is not None:
             with connection.cursor() as cursor:
-                cursor.execute(raw_query)
+                try:
+                    cursor.execute(raw_query)
+                except:
+                    messages.info(request, 'The doctor or patient has not been added please add them First!!')
+                    return render(request,'patients.html')
+
 
     
 
@@ -161,7 +180,13 @@ def phco(request):
         print(raw_query)
         if company is not None:
             with connection.cursor() as cursor:
-             cursor.execute(raw_query)
+             try:
+                cursor.execute(raw_query)
+             except:
+                 messages.info(request, 'The doctor or patient has not been added please add them First!!')
+                 return render(request,'PharmaceuticalCo.html')
+
+     
 
 
      return render(request,'PharmaceuticalCo.html')
@@ -178,7 +203,12 @@ def pharmacy(request):
             raw_query = f"INSERT INTO pharmacy (Name, Address,Phone_Number)  VALUES (  '{name}', '{address}','{phone}')"
             print(raw_query)
             with connection.cursor() as cursor:
-                cursor.execute(raw_query)
+                try:
+                    cursor.execute(raw_query)
+                except:
+                    messages.info(request, 'The doctor or patient has not been added please add them First!!')
+                    return render(request,'pharmacy.html')
+
 
      return render(request,'pharmacy.html')
 
@@ -189,7 +219,11 @@ def results(request):
         if sql is not None:
         #raw_query = "SELECT * FROM prescription_history"
             with connection.cursor() as cursor:
-                cursor.execute(sql)
+                try:
+                    cursor.execute(sql)
+                except:
+                    messages.info(request, 'Write proper sql query!!!!')
+                    return render(request,'result.html')
                 columns = [col[0] for col in cursor.description]
                 print(columns)
                 rows = cursor.fetchall()

@@ -8,6 +8,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class='bg-gray-800'>
+
     <nav
     class="bg-white border-gray-200 px-4 lg:px-6 py-2.5 dark:bg-gray-800"
   >
@@ -122,7 +123,16 @@
       </div>
     </div>
   </nav>
-
+ {% if messages %}
+      {% for message in messages %}
+      <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+        <span class="block sm:inline">{{ message|safe }}</span>
+      
+      </div> 
+    
+      {% endfor %}
+     
+    {% endif %}
 
   <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
     <table class="w-full text-sm text-left text-gray-800 dark:text-gray-400">
