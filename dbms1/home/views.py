@@ -17,44 +17,62 @@ def index(request):
 
 
 def p_history(request):
-    raw_query = "SELECT * FROM prescription_history"
-    with connection.cursor() as cursor:
-        cursor.execute(raw_query)
-        columns = [col[0] for col in cursor.description]
-        rows = cursor.fetchall()
 
-    # Print the column names
-    
+    if request.method == 'GET':
+        patientssn = request.GET.get('patients-SSN') 
+        patientname=request.GET.get('patientsName')   
+        if patientssn is None or patientname is None:
+            print(patientssn)
+            return render(request,'pHistory.html')
+        raw_query =f'''
+                        SELECT h.doctor_ssn,d.name, h.drug_tradename,h.Date,h.quantity 
+                        FROM prescriptions as h,patients as p,doctors as d 
+                        where
+                        p.SSN=h.patient_ssn and p.ssn={patientssn} and d.SSN=h.Doctor_SSN and p.name like "{patientname}";
 
-    # Print the data
-    for row in rows:
+                    ''' 
+        raw_query2 =f'''
+                        SELECT h.patient_ssn,p.name,p.address,p.age
+                        FROM prescriptions as h,patients as p,doctors as d 
+                        where
+                        p.SSN=h.patient_ssn and p.ssn={patientssn} and d.SSN=h.Doctor_SSN and p.name like "{patientname}";
+
+                    '''
         
-        
+        with connection.cursor() as cursor:
+            cursor.execute(raw_query2)
+            pat_detail = cursor.fetchone()
+            patientdetails={"ssn":pat_detail[0],
+                            "name":pat_detail[1],
+                            "address":pat_detail[2],
+                            "age":pat_detail[3]
+                            }
+            cursor.execute(raw_query)
+            columns = [col[0] for col in cursor.description]
+            rows = cursor.fetchall()
 
         
 
-# Create an empty list to store prescription data for each row
-        prescription_history_list = []
+            prescription_history_list = []
 
-        for row in rows:
-            # Sample data for the prescription history
-                prescription_data = {
-                    "PATIENTSSN": row[0],
-                    "PATIENTNAME": row[1],
-                    "PATIENTAGE": row[2],
-                    "ADDRESS": row[3],
-                    "DOCTORSSN": "1223",
-                    "DOCTORNAME": 'DoctorName',
-                    "SPECIALITY": 'General Physician',
-                    "DATE": str(datetime.date(2023, 7, 1))
-                }
+            for row in rows:
+                    
+                # Sample data for the prescription history
+                    prescription_data = {
+                        "DOCTORSSN": row[0],
+                        "DOCTORNAME": row[1],
+                        # "DATE": str(datetime.date(2023, 7, 1))
+                        "DRUG": row[2],
+                        "DATE": row[3],
+                        "quantity": row[4],
+                          }
 
-                # Append the current prescription_data dictionary to the list
-                prescription_history_list.append(prescription_data)
-        
+                    # Append the current prescription_data dictionary to the list
+                    prescription_history_list.append(prescription_data)
+            
 
-        print(str(prescription_history_list))
-    return render(request,'pHistory.html',{'pre':prescription_history_list})
+            print(str(prescription_history_list))
+        return render(request,'pHistory.html',{'pre':prescription_history_list,"pat":patientdetails})
 
 
 def appointment(request):
@@ -107,7 +125,7 @@ def doctors(request):
         
         name = request.GET.get('name')
         speciality = request.GET.get('speciality')
-        years_of_experience = request.GET.get('start_date')
+        years_of_experience = request.GET.get('years_of_experience')
  
         raw_query = f"INSERT INTO doctors ( Name, Specialty, YearsOfExp)  VALUES (  '{name}', '{speciality}','{years_of_experience}')"
         print(raw_query)
