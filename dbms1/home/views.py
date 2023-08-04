@@ -209,7 +209,7 @@ def results(request):
                 
 
                 print(str(prescription_history_list))
-                print(str(col_dict))
-            return render(request,'result.html',{'pre':prescription_history_list,"cols":'1'})
+                print(columns)
+            return render(request,'result.html',{'pre':prescription_history_list,"cols":columns,"sql":sql})
 
         return render(request,'result.html')
