@@ -20,29 +20,54 @@ def p_history(request):
 
     if request.method == 'GET':
         patientssn = request.GET.get('patients-SSN') 
-        patientname=request.GET.get('patientname')    
-        raw_query ='''
+        patientname=request.GET.get('patientsName')   
+        if patientssn is None or patientname is None:
+            print(patientssn)
+            return render(request,'pHistory.html')
+        raw_query =f'''
                         SELECT h.doctor_ssn,d.name, h.drug_tradename,h.Date,h.quantity 
                         FROM prescriptions as h,patients as p,doctors as d 
                         where
-                        p.SSN=h.patient_ssn and p.ssn=1 and d.SSN=h.Doctor_SSN and p.name like 'John Doe';
+                        p.SSN=h.patient_ssn and p.ssn={patientssn} and d.SSN=h.Doctor_SSN and p.name like "{patientname}";
 
                     ''' 
+        raw_query2 =f'''
+                        SELECT h.patient_ssn,p.name,p.address,p.age
+                        FROM prescriptions as h,patients as p,doctors as d 
+                        where
+                        p.SSN=h.patient_ssn and p.ssn={patientssn} and d.SSN=h.Doctor_SSN and p.name like "{patientname}";
+
+                    '''
+        
         with connection.cursor() as cursor:
+            try:
+                cursor.execute(raw_query2)
+            except:
+                 messages.info(request, 'Give proper SSN and PatientName!!')
+                 return render(request,'pHistory.html')
+                  
+            pat_detail = cursor.fetchone()
+            patientdetails={"ssn":pat_detail[0],
+                            "name":pat_detail[1],
+                            "address":pat_detail[2],
+                            "age":pat_detail[3]
+                            }
             cursor.execute(raw_query)
             columns = [col[0] for col in cursor.description]
             rows = cursor.fetchall()
 
-        for row in rows:
+        
 
             prescription_history_list = []
 
             for row in rows:
+                    
                 # Sample data for the prescription history
                     prescription_data = {
                         "DOCTORSSN": row[0],
                         "DOCTORNAME": row[1],
                         # "DATE": str(datetime.date(2023, 7, 1))
+                        "DRUG": row[2],
                         "DATE": row[3],
                         "quantity": row[4],
                           }
@@ -52,7 +77,7 @@ def p_history(request):
             
 
             print(str(prescription_history_list))
-        return render(request,'pHistory.html',{'pre':prescription_history_list})
+        return render(request,'pHistory.html',{'pre':prescription_history_list,"pat":patientdetails})
 
 
 def appointment(request):
@@ -95,7 +120,12 @@ def contract(request):
             print(raw_query)
             if name is not None:
                 with connection.cursor() as cursor:
-                    cursor.execute(raw_query)
+                    try:
+                        cursor.execute(raw_query)
+                    except:
+                        messages.info(request, 'Write Data in Correct form!!')
+                        return render(request,'contract.html')
+                        
 
     return render(request,'contract.html')
 
@@ -111,7 +141,11 @@ def doctors(request):
         print(raw_query)
         if name is not None:
             with connection.cursor() as cursor:
-             cursor.execute(raw_query)
+                try:
+                    cursor.execute(raw_query)
+                except:
+                    messages.info(request, 'Write Data in Correct form!!!!')
+                    render(request,'contract.html')
 
     return render(request,'Doctors.html')
 
@@ -125,7 +159,12 @@ def patients(request):
         print(raw_query)
         if name is not None:
             with connection.cursor() as cursor:
-                cursor.execute(raw_query)
+                try:
+                    cursor.execute(raw_query)
+                except:
+                    messages.info(request, 'Write Data in Correct form!!!')
+                    return render(request,'patients.html')
+
 
     
 
@@ -141,7 +180,13 @@ def phco(request):
         print(raw_query)
         if company is not None:
             with connection.cursor() as cursor:
-             cursor.execute(raw_query)
+             try:
+                cursor.execute(raw_query)
+             except:
+                 messages.info(request, 'Write Data in Correct form!!!!')
+                 return render(request,'PharmaceuticalCo.html')
+
+     
 
 
      return render(request,'PharmaceuticalCo.html')
@@ -158,7 +203,12 @@ def pharmacy(request):
             raw_query = f"INSERT INTO pharmacy (Name, Address,Phone_Number)  VALUES (  '{name}', '{address}','{phone}')"
             print(raw_query)
             with connection.cursor() as cursor:
-                cursor.execute(raw_query)
+                try:
+                    cursor.execute(raw_query)
+                except:
+                    messages.info(request, 'Write Data in Correct form!!!!')
+                    return render(request,'pharmacy.html')
+
 
      return render(request,'pharmacy.html')
 
@@ -169,7 +219,11 @@ def results(request):
         if sql is not None:
         #raw_query = "SELECT * FROM prescription_history"
             with connection.cursor() as cursor:
-                cursor.execute(sql)
+                try:
+                    cursor.execute(sql)
+                except:
+                    messages.info(request, 'Write proper sql query!!!!')
+                    return render(request,'result.html')
                 columns = [col[0] for col in cursor.description]
                 print(columns)
                 rows = cursor.fetchall()
@@ -183,13 +237,14 @@ def results(request):
 
                         # Append the current prescription_data dictionary to the list
                         prescription_history_list.append(prescription_data)
-                col_dict={
-                    "col":columns
-                    }
-                
+               
 
                 print(str(prescription_history_list))
-                print(str(col_dict))
-            return render(request,'result.html',{'pre':prescription_history_list,"cols":'1'})
+                print(columns)
+            return render(request,'result.html',{'pre':prescription_history_list,"cols":columns,"sql":sql})
 
         return render(request,'result.html')
+    
+
+def admin_view(request):
+    return render(request,"adminpage.html")

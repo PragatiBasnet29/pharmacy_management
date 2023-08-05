@@ -7,14 +7,24 @@
     {% load static %}
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
+<body class="bg-gray-700">
+    {% if messages %}
+    {% for message in messages %}
+    <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+      <span class="block sm:inline">{{ message|safe }}</span>
+    
+    </div> 
+  
+    {% endfor %}
+   
+  {% endif %}
     <div>
-        
+        <span class="ml-12 mt-4 text-2xl font-bold text-white">Write Your Query Here:</span>
 <form method='get'>   
    
-    <div class="relative max-w-[80%]">
+    <div class="relative max-w-[80%] my-4 " >
        
-        <input type="search" name="search" id="search" class="block w-full p-4 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
+        <input type="search" name="search" id="search" value="{{sql}}" class="block dark:bg-gray-200 w-full p-4 pl-10 text-md font-bold text-gray-400 border border-gray-300 rounded-lg  focus:ring-blue-500 focus:border-blue-500  dark:border-gray-600 dark:placeholder-gray-400 dark:text-slate-900 dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
         <button type="submit" class="text-white absolute right-2.5 bottom-2.5 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Search</button>
     </div>
 </form>
@@ -27,68 +37,33 @@
     <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
         <thead class="text-xs text-gray-900 uppercase dark:text-gray-400">
             <tr>
-                <th scope="col" class="px-6 py-3">
-                    Patient's SSN
+                {% for column in cols %}
+                <th scope="col" class="px-6 py-3 bg-gray-500">
+                    {{column}}
                 </th>
-                <th scope="col" class="px-6 py-3">
-                    Patient's Name
-                </th>
-                <th scope="col" class="px-6 py-3">
-                    Address
-                </th>
-                <th scope="col" class="px-6 py-3">
-                    Age
-                </th>
+               
+                {% endfor %}
             </tr>
         </thead>
         <tbody>
-            <tr class="bg-white dark:bg-gray-800">
-                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                    {Patient's SSN}
-                </th>
+            {% for prescription in pre %}
+            <tr class="bg-gray-500 dark:bg-gray-800">
+                
+                {% for key,value in prescription.items %}
+               
                 <td class="px-6 py-4">
-                    {Patient's Name}
+                 {{value}}
                 </td>
-                <td class="px-6 py-4">
-                    {Address}
-                </td>
-                <td class="px-6 py-4">
-                    {Age}
-                </td>
+                {% endfor %}
+                
             </tr>
-            <tr class="bg-white dark:bg-gray-800">
-                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                    {Patient's SSN}
-                </th>
-                <td class="px-6 py-4">
-                    {Patient's Name}
-                </td>
-                <td class="px-6 py-4">
-                    {Address}
-                </td>
-                <td class="px-6 py-4">
-                    {Age}
-                </td>
-            </tr>
-            <tr class="bg-white dark:bg-gray-800">
-                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                    {Patient's SSN}
-                </th>
-                <td class="px-6 py-4">
-                    {Patient's Name}
-                </td>
-                <td class="px-6 py-4">
-                    {Address}
-                </td>
-                <td class="px-6 py-4">
-                    {Age}
-                </td>
-            </tr>
+            {% endfor %}
         </tbody>
     </table>
 </div>
 
     </div>
+ 
 </body>
 </html>
 

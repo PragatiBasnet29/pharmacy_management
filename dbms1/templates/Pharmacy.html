@@ -46,8 +46,19 @@
       background-color: #45a049;
     }
   </style>
+  <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body>
+  {% if messages %}
+  {% for message in messages %}
+  <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+    <span class="block sm:inline">{{ message|safe }}</span>
+  
+  </div> 
+
+  {% endfor %}
+ 
+{% endif %}
   <div class="container">
     <h2>Pharmacy Details</h2>
     <form method="get">

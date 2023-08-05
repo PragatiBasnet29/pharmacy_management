@@ -122,28 +122,47 @@
       </div>
     </div>
   </nav>
+  {% if messages %}
+  {% for message in messages %}
+  <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+    <span class="block sm:inline">{{ message|safe }}</span>
+  
+  </div> 
+
+  {% endfor %}
+ 
+{% endif %}
 
 <div class="bg-black dark:bg-gray-900" >
 <form method='get'>
 <div class="mb-6">
     <label for="patients-SSN" class="block m-4 pt-4 ml-10 text-sm font-medium text-gray-900 dark:text-white">Patients SSN</label>
-   <input type="text" id="patients-SSN" class="block w-[70%] p-2 ml-10 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 sm:text-xs focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+   <input type="text" id="patients-SSN" name="patients-SSN" value="{{pat.ssn}}" class="block w-[70%] p-2 ml-10 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 sm:text-xs focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
 </div>
+
 <!--{% comment %} <div class="mb-6">
     <label for="doctors-SSN" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Doctors SSN</label>
     <input type="text" id="doctors-SSN" class="block w-full p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 sm:text-xs focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-
+{{patientssn}}
 </div>
 {% endcomment %} --> 
+
 <div class="mb-6">
   <label for="patientsName" class="block m-4 pt-4 ml-10 text-sm font-medium text-gray-900 dark:text-white">Patients Name</label>
-  <input type="text" id="patientsName" class="block w-[70%] p-2 ml-10 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 sm:text-xs focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+  <input type="text" id="patientsName" value="{{pat.name}}" name="patientsName" class="block w-[70%] p-2 ml-10 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 sm:text-xs focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
 </div> 
 <div></div>
-    <button type="submit" class="text-white ml-10 my-2 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Submit</button>
+    <button type="submit" class="text-white ml-10 my-2 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Search</button>
 </div>
 </form>
 </div>
+<span class="text-white">
+{{pat.ssn}}
+{{pat.name}}
+{{pat.address}}
+{{pat.age}}
+
+</span>
 
 
 
@@ -164,6 +183,9 @@
                     Date
                 </th>
                 <th scope="col" class="px-6 py-3">
+                  Date
+              </th>
+                <th scope="col" class="px-6 py-3">
                     Quantity
                 </th>
                 <th scope="col" class="px-6 py-3">
@@ -173,6 +195,7 @@
             </tr>
         </thead>
         <tbody>
+          {% for prescription in pre %}
             <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
                 <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                   {{ prescription.DOCTORSSN }}
@@ -181,7 +204,7 @@
                   {{ prescription.DOCTORNAME }}
                 </td>
                 <td class="px-6 py-4">
-                    {Patient's Age}
+                  {{prescription.DRUG}}
                 </td>
 
                 <td class="px-6 py-4">
@@ -189,7 +212,10 @@
               </td>
       
                 <td class="px-6 py-4">
-                    {Patient's Address}
+                    {{prescription.DATE}}
+                </td>
+                <td class="px-6 py-4">
+                  {{prescription.quantity }}
                 </td>
         
                 <td class="px-6 py-4">
@@ -197,35 +223,12 @@
                     Order
                   </button>
                 </td>
-                
+                {% endfor %}
 
 
     
         </tbody>
-        <table>
-          <tr>
-              <th>PATIENT'S SSN</th>
-              <th>PATIENT'S NAME</th>
-              <th>PATIENT'S AGE</th>
-              <th>ADDRESS</th>
-              <th>DOCTOR'S SSN</th>
-              <th>DOCTOR'S NAME</th>
-              <th>SPECIALITY</th>
-              <th>DATE</th>
-          </tr>
-          {% for prescription in pre %}
-          <tr>
-              <td>{{ prescription.PATIENTSSN}}</td>
-              <td>{{ prescription.PATIENTNAME }}</td>
-              <td>{{ prescription.PATIENTAGE}}</td>
-              <td>{{ prescription.ADDRESS }}</td>
-              <td>{{ prescription.DOCTORSSN }}</td>
-              <td>{{ prescription.DOCTORNAME }}</td>
-              <td>{{ prescription.SPECIALITY }}</td>
-              <td>{{ prescription.DATE }}</td>
-          </tr>
-          {% endfor %}
-      </table>
+     
 </div>
 
 
