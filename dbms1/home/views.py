@@ -4,7 +4,7 @@ from django.db import connection
 import datetime
 import json
 from django.contrib import messages
-
+import ast
 import re
 
 def find_word_after_from(input_string):
@@ -272,12 +272,12 @@ def update(request):
      if request.method=="POST":
         data = request.POST.get('data')
         sql = request.POST.get('sql')
-        col = request.POST.get('sql')
+        col = request.POST.get('column')
         data_dict = eval(data)
         print(data_dict)
-        print(sql)
-        
-        return render(request,"makeupdate.html",{"sql":sql,"data":data_dict,"columns":col})
+        print(type(col))
+        my_list = ast.literal_eval(col)
+        return render(request,"makeupdate.html",{"sql":sql,"data":data_dict,"columns":my_list})
      return render(request,"makeupdate.html",{"data":"nodata"})
 
 def endpoint_view(request):
@@ -288,7 +288,7 @@ def endpoint_view(request):
             # Process the payload data as needed
             data = payload.get('var3')
             sql= payload.get('var2')
-            import ast
+            
             table_name=find_word_after_from(sql)
             data_di = eval(data)
             data_dict = ast.literal_eval(data_di)

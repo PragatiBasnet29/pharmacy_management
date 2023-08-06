@@ -9,12 +9,23 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body class="bg-gray-900">
-   <span>The sql query is </span>
-   <span id="sql">{{sql}}</span>
-   <span id="alldata">{{data}}</span>
-   <span>{{columns}}</span>
+   <span class="text-white font-2xl font-bold my-4 ml-2">Update Page </span>
+   <span class="text-white font-2xl font-bold my-4 ml-2">The sql query is </span>
+   <span id="sql" class="text-white font-2xl font-bold  my-4">{{sql}}</span>
+   <span id="alldata" class="text-gray-900">{{data}}</span>
+   <span  class="text-white">{{columns}} </span>
     <table id="editable-table" class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-        
+        <thead class="text-xs text-gray-900 uppercase dark:text-gray-400">
+            <tr>
+                {% for colum in columns %}
+                <th scope="col" class="px-6 py-3 bg-gray-500">
+                    {{colum}}
+                </th>
+               
+                {% endfor %}
+                
+            </tr>
+        </thead>
         <tbody>
            
             <tr class="bg-gray-500 dark:bg-gray-800">
@@ -34,7 +45,7 @@
         </tbody>
     </table> 
     
-        <button id="read-updated-btn" class="text-white absolute mx-20 my-4 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Read Updated Values</button>
+        <button id="read-updated-btn" class="text-white absolute mx-20 my-4 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Update</button>
     
         <script>
             // Function to read the updated values from the table cells
