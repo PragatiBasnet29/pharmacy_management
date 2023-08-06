@@ -15,6 +15,9 @@ urlpatterns = [
     path('pharmacy/',views.pharmacy,name="pharmacy"),
     path('results/',views.results,name="results"),
     path('adminpage/',views.admin_view,name="adminpage"),
+    path('update/',views.update,name="update"),
+    path('patientpage/',views.patient,name="patientpage"),
+    path('endpoint/',views.endpoint_view,name="endpoint"),
 
     
 

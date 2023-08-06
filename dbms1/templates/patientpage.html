@@ -3,9 +3,55 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Patient page</title>
+    <title>Read Table Values</title>
 </head>
 <body>
-    
+    <table id="my-table">
+        <tr>
+            <th>Name</th>
+            <th>Age</th>
+            <th>Address</th>
+        </tr>
+        <tr>
+            <td>John</td>
+            <td>25</td>
+            <td>New York</td>
+        </tr>
+        <tr>
+            <td>Jane</td>
+            <td>30</td>
+            <td>London</td>
+        </tr>
+    </table>
+
+    <button onclick="readTableValues()">Read Table Values</button>
+
+    <script>
+        function readTableValues() {
+            const table = document.getElementById("my-table");
+            const data = [];
+
+            // Loop through each row of the table (skip the header row at index 0)
+            for (let i = 1; i < table.rows.length; i++) {
+                const row = table.rows[i];
+                const rowData = {};
+
+                // Loop through each cell in the row
+                for (let j = 0; j < row.cells.length; j++) {
+                    const cell = row.cells[j];
+                    const headerText = table.rows[0].cells[j].textContent.trim();
+                    const cellText = cell.textContent.trim();
+
+                    // Use the header text as the key and cell text as the value in the rowData object
+                    rowData[headerText] = cellText;
+                }
+
+                data.push(rowData);
+            }
+
+            // Print the data to the console (you can handle it as needed)
+            console.log(data);
+        }
+    </script>
 </body>
 </html>

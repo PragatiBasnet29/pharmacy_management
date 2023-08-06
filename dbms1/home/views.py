@@ -1,4 +1,4 @@
-from django.http import HttpResponse
+from django.http import HttpResponse,JsonResponse
 from django.shortcuts import render,redirect
 from django.db import connection
 import datetime
@@ -215,7 +215,7 @@ def pharmacy(request):
 def results(request):
     if request.method == 'GET':
         sql = request.GET.get('search')  
-        print(sql)
+        #print(sql)
         if sql is not None:
         #raw_query = "SELECT * FROM prescription_history"
             with connection.cursor() as cursor:
@@ -225,7 +225,7 @@ def results(request):
                     messages.info(request, 'Write proper sql query!!!!')
                     return render(request,'result.html')
                 columns = [col[0] for col in cursor.description]
-                print(columns)
+                #print(columns)
                 rows = cursor.fetchall()
             # for row in rows:
                 prescription_history_list = []
@@ -239,8 +239,8 @@ def results(request):
                         prescription_history_list.append(prescription_data)
                
 
-                print(str(prescription_history_list))
-                print(columns)
+               # print(str(prescription_history_list))
+                #print(columns)
             return render(request,'result.html',{'pre':prescription_history_list,"cols":columns,"sql":sql})
 
         return render(request,'result.html')
@@ -248,3 +248,48 @@ def results(request):
 
 def admin_view(request):
     return render(request,"adminpage.html")
+
+def patient(request):
+    return render(request,"patientpage.html")
+def update(request):
+     if request.method=="GET":
+         data = request.POST.get('data')
+         return render(request,"makeupdate.html",{"sql":sql,"data":data})
+     if request.method=="POST":
+        data = request.POST.get('data')
+        sql = request.POST.get('sql')
+        data_dict = eval(data)
+        print(data_dict)
+        print(sql)
+        return render(request,"makeupdate.html",{"sql":sql,"data":data_dict})
+     return render(request,"makeupdate.html",{"data":"nodata"})
+
+def endpoint_view(request):
+    if request.method == 'GET':
+            # Retrieve the variables from the POST request
+            payload = request.GET
+            
+            # Process the payload data as needed
+            variable1 = payload.get('var1')
+            variable2 = payload.get('var2')
+            a=variable1
+            b=variable2
+
+            print(variable1)
+            print(variable2)
+            print("hi")
+                
+
+                
+                # Retrieve more variables as needed
+                
+                # Process the dataS
+                
+                # Return a JSON response
+            response_data = {'message': 'Success',"var1":variable1,"var2":variable2}
+            return JsonResponse(response_data)
+            
+    else:
+            # Handle other HTTP methods if needed
+        return HttpResponse("cannot get coordinates")
+

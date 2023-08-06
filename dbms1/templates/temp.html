@@ -1,0 +1,67 @@
+<table id="editable-table" class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+        
+    <tbody>
+       
+        <tr class="bg-gray-500 dark:bg-gray-800">
+           
+            {% for key,value in data.items%}
+           
+            <td contenteditable="true" class="px-6 py-4">
+             {{value}}
+             
+            </td>
+            {% endfor %}
+           
+           
+        </tr>
+
+       
+    </tbody>
+</table> 
+
+
+
+
+
+
+<script>
+    // Function to read the updated values from the table cells
+    function readUpdatedValues() {
+        const updatedData = [];
+        const cells = document.querySelectorAll('td[contenteditable="true"]');
+
+        cells.forEach(cell => {
+            const value = cell.textContent.trim();
+            updatedData.push(value);
+        });
+
+        // Output the updated data to the console (you can handle the data as needed)
+        console.log(updatedData);
+        $.ajax({
+            type: 'GET', // Change the method to GET
+            url: '/endpoint/',  // Replace with your actual view URL
+            data:data, // No need to stringify the data in GET requests
+            headers: {
+              'X-Requested-With': 'XMLHttpRequest',
+              
+            },
+            success: function(response) {
+              console.log(response);
+              // Handle the success response
+            },
+            error: function(xhr, status, error) {
+              console.error(xhr.responseText);
+              // Handle errors
+            }});
+        
+    }
+    
+
+    // Attach a click event listener to the button to read the updated values
+    document.getElementById("read-updated-btn").addEventListener("click", readUpdatedValues);
+    var data = {
+        'var1': JSON.stringify(updatedData),
+        'var2': "hello",
+    }
+   
+</script>
