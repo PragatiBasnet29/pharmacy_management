@@ -9,8 +9,10 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body class="bg-gray-900">
-   
-   
+   <span>The sql query is </span>
+   <span id="sql">{{sql}}</span>
+   <span id="alldata">{{data}}</span>
+   <span>{{columns}}</span>
     <table id="editable-table" class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
         
         <tbody>
@@ -32,7 +34,7 @@
         </tbody>
     </table> 
     
-        <button id="read-updated-btn" class="bg-red-900">Read Updated Values</button>
+        <button id="read-updated-btn" class="text-white absolute mx-20 my-4 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Read Updated Values</button>
     
         <script>
             // Function to read the updated values from the table cells
@@ -47,28 +49,33 @@
     
                 // Output the updated data to the console (you can handle the data as needed)
                 console.log(updatedData);
+                const spanElement = document.getElementById("sql");
+                const sqlv = spanElement.textContent;
+                const spanElement1 = document.getElementById("alldata");
+                const dataall = document.getElementById("alldata").textContent;
                 var data = {
                 'var1': JSON.stringify(updatedData),
-                'var2': "hello",
-            }
+                'var2': JSON.stringify(sqlv),
+                'var3': JSON.stringify(dataall),
+                }
                 $.ajax({
-            type: 'GET', // Change the method to GET
-            url: '/endpoint/',  // Replace with your actual view URL
-            data:data, // No need to stringify the data in GET requests
-            headers: {
-              'X-Requested-With': 'XMLHttpRequest',
-              
-            },
-            success: function(response) {
-              console.log(response);
-              // Handle the success response
-            },
-            error: function(xhr, status, error) {
-              console.error(xhr.responseText);
-              // Handle errors
-            }});
+                type: 'GET', // Change the method to GET
+                url: '/endpoint/',  // Replace with your actual view URL
+                data:data, // No need to stringify the data in GET requests
+                headers: {
+                'X-Requested-With': 'XMLHttpRequest',
                 
-            }
+                },
+                success: function(response) {
+                console.log(response);
+                // Handle the success response
+                },
+                error: function(xhr, status, error) {
+                console.error(xhr.responseText);
+                // Handle errors
+                }});
+                    
+                }
             
     
             // Attach a click event listener to the button to read the updated values
@@ -76,6 +83,6 @@
             
            
         </script>
-        {{data}}
+     
     </body>
 </html>

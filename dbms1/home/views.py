@@ -5,6 +5,22 @@ import datetime
 import json
 from django.contrib import messages
 
+import re
+
+def find_word_after_from(input_string):
+    # Define a regular expression pattern to match the word after "from"
+    pattern = r'from\s+(\w+)'
+
+    # Use re.search() to find the first occurrence of the pattern in the input string
+    match = re.search(pattern, input_string)
+
+    if match:
+        # The word after "from" is captured in the first group (group(1)) of the match object
+        word_after_from = match.group(1)
+        return word_after_from
+    else:
+        return None
+
 
 def hello_view(request):
     return HttpResponse("hello")
@@ -252,44 +268,67 @@ def admin_view(request):
 def patient(request):
     return render(request,"patientpage.html")
 def update(request):
-     if request.method=="GET":
-         data = request.POST.get('data')
-         return render(request,"makeupdate.html",{"sql":sql,"data":data})
+
      if request.method=="POST":
         data = request.POST.get('data')
         sql = request.POST.get('sql')
+        col = request.POST.get('sql')
         data_dict = eval(data)
         print(data_dict)
         print(sql)
-        return render(request,"makeupdate.html",{"sql":sql,"data":data_dict})
+        
+        return render(request,"makeupdate.html",{"sql":sql,"data":data_dict,"columns":col})
      return render(request,"makeupdate.html",{"data":"nodata"})
 
 def endpoint_view(request):
     if request.method == 'GET':
             # Retrieve the variables from the POST request
             payload = request.GET
-            
+            newdata = payload.get('var1')
             # Process the payload data as needed
-            variable1 = payload.get('var1')
-            variable2 = payload.get('var2')
-            a=variable1
-            b=variable2
+            data = payload.get('var3')
+            sql= payload.get('var2')
+            import ast
+            table_name=find_word_after_from(sql)
+            data_di = eval(data)
+            data_dict = ast.literal_eval(data_di)
+            fullstring=""
+            newfullstring=""
+            newdatastr=eval(newdata)
+            print(newdatastr)
+            print(data_dict)
+            for key,value in data_dict.items():
+                if isinstance(value, int):
+                    string=f"{key}={value} and "
+                else:
+                    string=f"{key}='{value}' and "
+                fullstring=fullstring+string
+            fullstring = fullstring[:-4]
 
-            print(variable1)
-            print(variable2)
-            print("hi")
-                
-
-                
-                # Retrieve more variables as needed
-                
-                # Process the dataS
-                
-                # Return a JSON response
-            response_data = {'message': 'Success',"var1":variable1,"var2":variable2}
-            return JsonResponse(response_data)
+            for index, (key, value) in enumerate(data_dict.items(), 1):
+                if isinstance(value, int):
+                    newstring=f"{key}={newdatastr[index-1]} , "
+                else:
+                    newstring=f"{key}='{newdatastr[index-1]}' , "
+                newfullstring=newfullstring+newstring
+            newfullstring = newfullstring[:-2]
+               
+           
+            raw_query = f"update {table_name} set {newfullstring} where {fullstring}"
+            raw_query=raw_query+";"
+            print(raw_query)
             
-    else:
-            # Handle other HTTP methods if needed
-        return HttpResponse("cannot get coordinates")
+            with connection.cursor() as cursor:
+               
+                cursor.execute(raw_query)
+                print("querry okay")
+
+          
+            
+            response_data = {'message': 'Success',"var1":data,"var2":sql}
+            return JsonResponse(response_data)
+    return JsonResponse("failed")
+            
+    
+       
 
